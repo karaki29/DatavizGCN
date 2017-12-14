@@ -1,0 +1,3 @@
+http://duspviz.mit.edu/d3-workshop/mapping-data-with-d3/
+http://www.datavis.fr/index.php?page=map-firststep
+https://bl.ocks.org/mbostock/8ca036b3505121279daf

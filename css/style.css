@@ -1,0 +1,58 @@
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    color: black;
+    width: 275px;
+    padding: 2px;
+    font: Arial 12px sans-serif;
+    background: white;
+    border: 0;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.q0-4{fill:rgb(255,237,160)} 
+.q1-4{fill:rgb(254,178,76)}  
+.q2-4{fill:rgb(252,78,42)} 
+.q3-4{fill:rgb(189,0,38)}
+
+
+.q0-8{fill:#fff5f0}
+.q1-8{fill:#fee0d2}
+.q2-8{fill:#fcbba1}
+.q3-8{fill:#fc9272}
+.q4-8{fill:#fb6a4a}
+.q5-8{fill:#ef3b2c}
+.q6-8{fill:#cb181d}
+.q7-8{fill:#99000d}
+
+
+.bar_reg {
+    fill: steelblue;
+    opacity: 0.5;
+}
+
+.bar_global {
+fill: gray;
+opacity: 0.5;
+}
+
+.bar_reg:hover {
+fill: brown;
+}
+
+.axis {
+font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+fill: none;
+stroke: #000;
+shape-rendering: crispEdges;
+}
+
+.x.axis path {
+display: none;
+}

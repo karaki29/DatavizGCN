@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Dataviz</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/circular-menu.css">
+    <link rel="stylesheet" type="text/css" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <script src="js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/d3-scale-chromatic.v1.min.js"></script>
+    <script src="js/queue.v1.min.js"></script>
+    <script src="js/topojson.v2.min.js"></script>
+	<style>
+		body {font-family: Arial;}
+
+		/* the tab */
+		.tab {
+				overflow: hidden;
+				border: 1px solid #ccc;
+				background-color: #f1f1f1;
+			}
+
+		/* the buttons inside the tab */
+		.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		/* Change background color of buttons on hover */
+		.tab button:hover {
+			background-color: #ddd;
+		}
+
+		/* Create an active/current tablink class */
+		.tab button.active {
+			background-color: #ccc;
+		}
+
+		/* Style the tab content */
+		.tabcontent {
+			display: none;
+			padding: 6px 12px;
+			border: 1px solid #ccc;
+			border-top: none;
+		}
+	</style>
+
+</head>
+
+<body>
+    <div>
+        <div class="row">
+            <div class="container">
+                <h1 id="titre"></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-7">
+                <div id='map'>
+
+                </div>
+            </div>
+            <div class="col-5">
+                <div id='chart'>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-7">
+                <h3 class="text-center">Population : effectifs et densités</h3>
+            </div>
+            <div class="col-5">
+                <h3 class="text-center">Taux démographiques</h3>
+            </div>
+        </div>
+        <div id="menu_list" class="menu"></div>
+    </div>
+    <div class="modal fade" id="intro" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">GCN - DATAVIZ - Hind MADI, Marc SECHET & Hassan KARAKI</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h5>Introduction</h5>
+                    <p>Ce Dataviz regroupe les Principaux indicateurs démographiques de la période 2002-2012:
+                        Population totale,
+                        Densités de population,
+                        L'indicateur conjoncturel de fécondité,
+                        Les taux de natalité,
+                        Les taux de mortalité standardisés des 65 ans ou plus et
+                        L'indice de vieillissement de la population pour 100 personnes âgées de moins de 20 ans.
+                        <br>
+                        Source : <a href="http://www.ecosante.fr/index2.php?base=DEPA&langs=FRA&langh=FRA">ecosante.fr/index2.php?base=DEPA&langs=FRA&langh=FRA</a>
+                    </p>
+                    <hr>
+                    <h5>Type d'indicateurs</h5>
+                    <p>Les indicateurs sont répartis comme suit:<br> La population totale est representé par les surfaces colorés <br> Les densités de population representés par des cercles <br> Le reste des indicateurs sont regroupés dans le graphique à droite où les barres grises representent les taux moyennes de toute la France tandis que les barres en bleu representent les taux de la région selectionnée sur la carte.</p>
+                    <hr>
+                    <h5>Comment utiliser</h5>
+                    <p>En faisant un clic droit, un menu apparait contenant les années 2002-2012, Les indicateurs changent selon l'année selectionnée.</p>
+					<hr>
+					<h5>Analyse avec "Tableau" </h5>
+					<p>On a commencé notre analyse en nettoyant le fichier csv et essayant de comprendre les données. Les indicateurs principaux sont la population totale, densités de population, l'indicateur conjoncturel de fécondité, les taux de natalité, les taux de mortalité et l'indice de vieillissement.</p>
+					<div class="tab">
+						<button class="tablinks active" onclick="openTab(event, 'Pop')">Population</button>
+						<button class="tablinks" onclick="openTab(event, 'Pop-vieil')">Population-Vieil.</button>
+						<button class="tablinks" onclick="openTab(event, 'Pop-dens')">Population-Densité</button>
+						<button class="tablinks" onclick="openTab(event, 'Dens-nat')">Densité-Natalité</button>
+						<button class="tablinks" onclick="openTab(event, 'conclusion')">Conclusion</button>
+					</div>
+
+					<div id="Pop" class="tabcontent">
+						<h3>Population</h3>
+						<img src="img/pop.png" alt="Smiley face" height="300"/>
+						<p>L’image ci-dessus montre un tableau de bord réalisé sous Tableau afin d’analyser la population. Cette image contient deux dataviz qui sont liées, les bulles groupées montrent la variation de la population totale entre les régions françaises. Les barres cote à cote représentent la variation de cet indicateur en fonction des années 2002, 2007 et 2012. On a remarqué que la population s’augmente dans les régions où elles ont déjà une population très importante alors qu’elle est constante dans les régions qui ont des populations minimums.</p>
+					</div>
+					
+					<div id="Pop-vieil" class="tabcontent">
+						<h3>Population-Vieillissement</h3>
+						<img src="img/PopaVsVeill.png" alt="Smiley face" height="300"/>
+						<p>L’image ci-dessus montre un tableau de bord réalisé sous Tableau afin d’analyser les données. Cette image contient deux dataviz qui sont liées, La dataviz de bulles groupées montre la variation de la population totale entre les régions françaises. L’histogramme à droite montre le taux de vieillissement dans ces régions, on a sélectionné les trois régions qui ont les indices de vieillissements le plus élevés (Limousin, Auvergne et Poitou-Charentes) et les trois autres régions qui ont les indices les moins élevés (Ile-de-France, Nord-Pas-de-Calais et Picardie). On remarque que les grandes  bulles  correspondent aux régions qui ont les indices de vieillissements minimum  et vice-versa. Alors l’indice de vieillissement est inversement proportionnel à la population.</p>
+					</div>
+					
+					<div id="Pop-dens" class="tabcontent">
+						<h3>Population-Densité</h3>
+						<img src="img/popVsDens.png" alt="Smiley face" height="300"/>
+						<p>Les arborescences ci-dessus représentent la population suivant les tailles des rectangles et la densité de population suivant le dégradé de la couleur rouge. Il nous montre que ces deux indicateurs sont éventuellement proportionnels.   </p>
+					</div>
+					
+					<div id="Dens-nat" class="tabcontent">
+						<h3>Densité-Natalité</h3>
+						<img src="img/densVsNat.png" alt="Smiley face" height="300"/>
+						<p>Les bulles groupées ci-dessus représentent la densité en taille et les taux de natalité en couleur. On remarque qu’on n’a pas une relation importante entre ces deux indicateurs.</p>
+					</div>
+					
+					<div id="conclusion" class="tabcontent">
+						<h3>Conclusion</h3>
+						<p>Finalement on a décidé de représenter la population et la densité sur <b>une carte</b> et de représenter les autres indicateurs par <b>un histogramme</b> pour montrer d’une part la relation entre population et densité, et d'autre part la relation entre ces deux indicateurs avec les autres.</p>
+					</div>
+
+					<script>
+					document.getElementById("Pop").style.display = "block";
+						function openTab(evt, tabName) {
+							var i, tabcontent, tablinks;
+							tabcontent = document.getElementsByClassName("tabcontent");
+							for (i = 0; i < tabcontent.length; i++) {
+								tabcontent[i].style.display = "none";
+							}
+							tablinks = document.getElementsByClassName("tablinks");
+							for (i = 0; i < tablinks.length; i++) {
+								tablinks[i].className = tablinks[i].className.replace(" active", "");
+							}
+							document.getElementById(tabName).style.display = "block";
+							evt.currentTarget.className += " active";
+						}
+					</script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/circular-menu.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
